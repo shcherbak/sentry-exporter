@@ -1,0 +1,16 @@
+{{- define "sentry-exporter.config" }}
+{{- range $key, $value := $.Values.config }}
+- name: {{ $key }}
+  valueFrom:
+    configMapKeyRef:
+      name: {{ $.Release.Name}}
+      key: {{ $key }}
+{{- end }}
+{{- range $key, $value := $.Values.secret }}
+- name: {{ $key }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $.Release.Name}}
+      key: {{ $key }}
+{{- end }}
+{{- end }}

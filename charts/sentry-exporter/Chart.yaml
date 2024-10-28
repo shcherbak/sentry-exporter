@@ -1,0 +1,8 @@
+apiVersion: v2
+name: sentry-exporter
+version: 0.0.1
+appVersion: 0.0.1
+type: application
+description: The helm chart for prometheus sentry exporter
+sources:
+  - https://github.com/shcherbak/sentry-exporter

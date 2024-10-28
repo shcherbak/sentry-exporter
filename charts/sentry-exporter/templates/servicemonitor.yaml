@@ -1,0 +1,19 @@
+{{- if .Values.servicemonitor.enabled }}
+kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: {{ .Release.Name}}
+  labels:
+    app: {{ .Release.Name}}
+    type: backend
+spec:
+  endpoints:
+  - interval: 60s
+    path: /metrics
+    port: http
+  jobLabel: {{ .Release.Name}}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name}}
+      type: backend
+{{- end -}}

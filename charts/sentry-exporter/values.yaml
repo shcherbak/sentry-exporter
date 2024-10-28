@@ -1,0 +1,32 @@
+replicas: 1
+annotations: {}
+
+config:
+  APP_ENV: "prod"
+  REDIS_ADDR: "127.0.0.1"
+  REDIS_PORT: "6379"
+  REDIS_DBNO: "7"
+  TTL_SECONDS: "300"
+  BASE_URL: "https://sentry.com/api/0"
+  ORGANIZATION_SLUG: "sentry"
+  ROUTINE_MAX: "3"
+  SLEEP_SEC: "45"
+
+secret:
+  AUTH_TOKEN: 'ChangeMe'
+  API_TOKEN: 'ChangeMe'
+
+main:
+  image: "jushcherbak/sentry-exporter:0.0.1"
+  pullPolicy: "IfNotPresent"
+
+redis:
+  enabled: true
+  image: "redis:6.2.16"
+  pullPolicy: "IfNotPresent"
+
+service:
+  annotations: {}
+
+servicemonitor:
+  enabled: true

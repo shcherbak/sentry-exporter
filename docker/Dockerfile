@@ -13,6 +13,7 @@ WORKDIR /opt/sentry-exporter/
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
+    ca-certificates \
   && rm -rf /var/cache/apt/archives/*
 COPY --from=builder /opt/sentry-exporter/sentry-exporter .
 
