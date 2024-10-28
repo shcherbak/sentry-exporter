@@ -62,7 +62,12 @@ func init() {
 
 	_, found = os.LookupEnv("SLEEP_SEC")
 	if !found {
-		os.Setenv("SLEEP_SEC", "90")
+		os.Setenv("SLEEP_SEC", "45")
+	}
+
+	_, found = os.LookupEnv("TTL_SECONDS")
+	if !found {
+		os.Setenv("TTL_SECONDS", "300")
 	}
 
 	_, found = os.LookupEnv("ORGANIZATION_SLUG")
