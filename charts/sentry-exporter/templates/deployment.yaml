@@ -17,11 +17,11 @@ spec:
       labels:
         app: {{ .Release.Name}}
         type: backend
-      {{- if .Values.annotations }}
       annotations:
+        checksum/config: {{ include (print .Template.BasePath "/config.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
-      {{- end }}
       {{- end }}
     spec:
       containers:
@@ -40,4 +40,16 @@ spec:
             path: /healthcheck
             port: 80
           initialDelaySeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+          periodSeconds: 60
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 80
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          timeoutSeconds: 1
           periodSeconds: 60

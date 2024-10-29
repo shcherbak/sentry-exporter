@@ -3,17 +3,16 @@ annotations: {}
 
 config:
   APP_ENV: "prod"
-  REDIS_ADDR: "127.0.0.1"
-  REDIS_PORT: "6379"
-  REDIS_DBNO: "7"
-  TTL_SECONDS: "300"
   BASE_URL: "https://sentry.com/api/0"
   ORGANIZATION_SLUG: "sentry"
+  PROJECTS_EXCLUDE: ""
+  PROJECTS_INCLUDE: ""
+  REDIS_ADDR: "127.0.0.1"
+  REDIS_DBNO: "7"
+  REDIS_PORT: "6379"
   ROUTINE_MAX: "3"
   SLEEP_SEC: "45"
-  PROJECTS_INCLUDE: ""
-  PROJECTS_EXCLUDE: ""
-  #PROJECTS_EXCLUDE: ".+(\_|\-)dev$"
+  TTL_SECONDS: "300"
 
 secret:
   AUTH_TOKEN: 'ChangeMe'
