@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -24,6 +25,19 @@ func (c *SentryIssuesMiddleware) ImportIssueFromApiToRedis(organization string, 
 	for _, i := range sentryIssues {
 		i.RedisInsert(i, c.Context, c.Client, c.TTL)
 	}
+}
+
+func (c *SentryIssuesMiddleware) GetAuthorizationMetrics(next http.Handler, token string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+
+		if authHeader != fmt.Sprintf("Bearer %s", token) {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func (s *SentryIssuesMiddleware) HealthCheck(w http.ResponseWriter, r *http.Request) {

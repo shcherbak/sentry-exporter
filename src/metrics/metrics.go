@@ -12,12 +12,12 @@ import (
 
 var (
 	ID                     = "id"
-	IssueId                = "IssueId"
-	Level                  = "Level"
-	Status                 = "Status"
-	IssueType              = "IssueType"
-	Priority               = "Priority"
-	ProjectSlug            = "ProjectSlug"
+	IssueId                = "issue_id"
+	Level                  = "level"
+	Status                 = "status"
+	IssueType              = "issue_type"
+	Priority               = "priority"
+	ProjectSlug            = "project_slug"
 	sentryIssueMetricValue = float64(-1)
 	sentryIssueMetricDesc  = prometheus.NewDesc(
 		"sentry_issue_events",

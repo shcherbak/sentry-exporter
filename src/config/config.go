@@ -9,17 +9,19 @@ import (
 )
 
 type Config struct {
-	APP_ENV           string
 	API_TOKEN         string
+	APP_ENV           string
 	AUTH_TOKEN        string
 	BASE_URL          string
+	LISTEN_PORT       string
 	ORGANIZATION_SLUG string
+	PROJECTS_EXCLUDE  string
+	PROJECTS_INCLUDE  string
+	REDIS_ADDR        string
+	REDIS_DBNO        string
+	REDIS_PORT        string
 	ROUTINE_MAX       string
 	SLEEP_SEC         string
-	LISTEN_PORT       string
-	REDIS_ADDR        string
-	REDIS_PORT        string
-	REDIS_DBNO        string
 	TTL_SECONDS       string
 }
 
@@ -53,26 +55,6 @@ func init() {
 	_, found = os.LookupEnv("AUTH_TOKEN")
 	if !found {
 		os.Setenv("AUTH_TOKEN", "")
-	}
-
-	_, found = os.LookupEnv("ROUTINE_MAX")
-	if !found {
-		os.Setenv("ROUTINE_MAX", "3")
-	}
-
-	_, found = os.LookupEnv("SLEEP_SEC")
-	if !found {
-		os.Setenv("SLEEP_SEC", "45")
-	}
-
-	_, found = os.LookupEnv("TTL_SECONDS")
-	if !found {
-		os.Setenv("TTL_SECONDS", "300")
-	}
-
-	_, found = os.LookupEnv("ORGANIZATION_SLUG")
-	if !found {
-		os.Setenv("ORGANIZATION_SLUG", "sentry")
 	}
 
 	refl := reflect.ValueOf(config).Elem()

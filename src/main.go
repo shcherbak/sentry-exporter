@@ -78,8 +78,19 @@ func main() {
 		Addr:    fmt.Sprintf(":%s", config.GetConfig().LISTEN_PORT),
 		Handler: nil,
 	}
-	http.Handle("/metrics", promhttp.Handler())
+
 	http.HandleFunc("/healthcheck", issuesMiddleware.HealthCheck)
+
+	if len(config.GetConfig().API_TOKEN) > 0 {
+		log.Printf("Serving /metrics with no Authorization: Bearer TOKEN on %s", config.GetConfig().LISTEN_PORT)
+		http.Handle(
+			"/metrics",
+			issuesMiddleware.GetAuthorizationMetrics(promhttp.Handler(), config.GetConfig().API_TOKEN),
+		)
+	} else {
+		log.Printf("Serving /metrics with no Authorization on %s", config.GetConfig().LISTEN_PORT)
+		http.Handle("/metrics", promhttp.Handler())
+	}
 
 	shutdownWaiter1.Add(1)
 	ch <- 1
@@ -90,7 +101,11 @@ func main() {
 	}()
 
 	for {
-		projects, err := issuesMiddleware.SentryClient.GetProjects(config.GetConfig().ORGANIZATION_SLUG)
+		projects, err := issuesMiddleware.SentryClient.GetProjects(
+			config.GetConfig().ORGANIZATION_SLUG,
+			config.GetConfig().PROJECTS_EXCLUDE,
+			config.GetConfig().PROJECTS_INCLUDE,
+		)
 		if err != nil {
 			log.Fatalf("Can't list projects: %v", err)
 		}

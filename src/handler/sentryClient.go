@@ -47,7 +47,7 @@ func (c *SentryClient) getRequest(url string) ([]byte, error) {
 	return body, nil
 }
 
-func (c *SentryClient) GetProjects(organizationSlug string) ([]SentryProject, error) {
+func (c *SentryClient) GetProjects(organizationSlug string, excludeFilter string, includeFiler string) ([]SentryProject, error) {
 	url := fmt.Sprintf("%s/organizations/%s/projects/", c.baseURL, organizationSlug)
 	body, err := c.getRequest(url)
 	var projects []SentryProject
