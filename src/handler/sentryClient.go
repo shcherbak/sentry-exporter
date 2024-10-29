@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 )
 
 type SentryClient struct {
@@ -60,6 +61,36 @@ func (c *SentryClient) GetProjects(organizationSlug string, excludeFilter string
 	}
 
 	return projects, nil
+}
+
+func (c *SentryClient) IncludeProjectsByPattern(objects []SentryProject, includePattern string) ([]SentryProject, error) {
+	includeRe, err := regexp.Compile(includePattern)
+	if err != nil {
+		return nil, fmt.Errorf("include regex compillation error: %v", err)
+	}
+
+	var filteredObjects []SentryProject
+	for _, obj := range objects {
+		if includeRe.MatchString(obj.Slug) {
+			filteredObjects = append(filteredObjects, obj)
+		}
+	}
+	return filteredObjects, nil
+}
+
+func (c *SentryClient) ExcludeProjectsByPattern(objects []SentryProject, excludePattern string) ([]SentryProject, error) {
+	excludeRe, err := regexp.Compile(excludePattern)
+	if err != nil {
+		return nil, fmt.Errorf("exclude regex compillation error: %v", err)
+	}
+
+	var filteredObjects []SentryProject
+	for _, obj := range objects {
+		if !excludeRe.MatchString(obj.Slug) {
+			filteredObjects = append(filteredObjects, obj)
+		}
+	}
+	return filteredObjects, nil
 }
 
 func (c *SentryClient) GetIssues(organizationSlug string, projectSlug string) ([]SentryIssue, error) {

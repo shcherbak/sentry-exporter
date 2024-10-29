@@ -82,7 +82,7 @@ func main() {
 	http.HandleFunc("/healthcheck", issuesMiddleware.HealthCheck)
 
 	if len(config.GetConfig().API_TOKEN) > 0 {
-		log.Printf("Serving /metrics with no Authorization: Bearer TOKEN on %s", config.GetConfig().LISTEN_PORT)
+		log.Printf("Serving /metrics with Authorization: Bearer TOKEN on %s", config.GetConfig().LISTEN_PORT)
 		http.Handle(
 			"/metrics",
 			issuesMiddleware.GetAuthorizationMetrics(promhttp.Handler(), config.GetConfig().API_TOKEN),
@@ -108,6 +108,20 @@ func main() {
 		)
 		if err != nil {
 			log.Fatalf("Can't list projects: %v", err)
+		}
+
+		if len(config.GetConfig().PROJECTS_INCLUDE) > 0 {
+			projects, err = issuesMiddleware.SentryClient.IncludeProjectsByPattern(projects, config.GetConfig().PROJECTS_INCLUDE)
+			if err != nil {
+				log.Fatalf("Can't filter projects with PROJECTS_INCLUDE regex: %v", err)
+			}
+		}
+
+		if len(config.GetConfig().PROJECTS_EXCLUDE) > 0 {
+			projects, err = issuesMiddleware.SentryClient.ExcludeProjectsByPattern(projects, config.GetConfig().PROJECTS_EXCLUDE)
+			if err != nil {
+				log.Fatalf("Can't filter projects with PROJECTS_EXCLUDE regex: %v", err)
+			}
 		}
 
 		for i, p := range projects {

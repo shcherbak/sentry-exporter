@@ -11,13 +11,16 @@ config:
   ORGANIZATION_SLUG: "sentry"
   ROUTINE_MAX: "3"
   SLEEP_SEC: "45"
+  PROJECTS_INCLUDE: ""
+  PROJECTS_EXCLUDE: ""
+  #PROJECTS_EXCLUDE: ".+(\_|\-)dev$"
 
 secret:
   AUTH_TOKEN: 'ChangeMe'
-  API_TOKEN: 'ChangeMe'
+  API_TOKEN: ''
 
 main:
-  image: "jushcherbak/sentry-exporter:0.0.1"
+  image: "jushcherbak/sentry-exporter:0.0.2"
   pullPolicy: "IfNotPresent"
 
 redis:
